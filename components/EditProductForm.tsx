@@ -18,18 +18,9 @@ import {
 } from "@mui/material";
 import { Formik } from "formik";
 import Link from "next/link";
+import { IAddProductForm } from "./AddProductForm";
 
-export interface IAddProductForm {
-  name: string;
-  brand: string;
-  price: number;
-  quantity: number;
-  category: string;
-  freeShipping: string;
-  description: string;
-}
-
-const AddProductForm = () => {
+const EditProductForm = () => {
   return (
     <Formik
       initialValues={{
@@ -55,7 +46,7 @@ const AddProductForm = () => {
             className="flex flex-col gap-4 items-center justify-center p-4 min-w-[400px] shadow-lg rounded-xl bg-white"
             onSubmit={formik.handleSubmit}
           >
-            <Typography variant="h5">Add Product</Typography>
+            <Typography variant="h5">Edit Product</Typography>
             <FormControl fullWidth>
               <TextField
                 label="Name"
@@ -163,4 +154,4 @@ const AddProductForm = () => {
     </Formik>
   );
 };
-export default AddProductForm;
+export default EditProductForm;
