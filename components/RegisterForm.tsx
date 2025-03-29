@@ -1,4 +1,5 @@
 "use client";
+import { axiosInstance } from "@/lib/axios.instance";
 import { RegisterFormSchema } from "@/validationSchema/user.registerSchema";
 import {
   Button,
@@ -9,9 +10,13 @@ import {
   TextField,
   Typography,
   InputLabel,
+  CircularProgress,
 } from "@mui/material";
+import { useMutation } from "@tanstack/react-query";
 import { Formik } from "formik";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 interface IRegisterForm {
   email: string;
   password: string;
@@ -24,6 +29,23 @@ interface IRegisterForm {
 }
 
 const RegisterForm = () => {
+  const router = useRouter();
+  const { isPending, mutate } = useMutation({
+    mutationKey: ["register-user"],
+    mutationFn: async (values: IRegisterForm) => {
+      return await axiosInstance.post("/user/register", values);
+    },
+    onSuccess: (res) => {
+      router.push("/login");
+      toast.success(res?.data?.message);
+    },
+    onError: (error) => {
+      toast.error(error?.response?.data?.message);
+    },
+  });
+  if (isPending) {
+    return <CircularProgress />;
+  }
   return (
     <Formik
       initialValues={{
@@ -37,8 +59,8 @@ const RegisterForm = () => {
         address: "",
       }}
       validationSchema={RegisterFormSchema}
-      onSubmit={(values: IRegisterForm) => {
-        console.log("Form submitted with values:", values);
+      onSubmit={async (values: IRegisterForm) => {
+        mutate(values);
       }}
     >
       {(formik) => (
