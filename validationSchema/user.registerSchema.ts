@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 import * as yup from "yup";
-export const userFormSchema = yup.object({
+export const RegisterFormSchema = yup.object({
   email: yup
     .string()
     .required("Email is required")

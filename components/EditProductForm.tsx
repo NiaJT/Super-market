@@ -17,7 +17,6 @@ import {
   Typography,
 } from "@mui/material";
 import { Formik } from "formik";
-import Link from "next/link";
 import { IAddProductForm } from "./AddProductForm";
 
 const EditProductForm = () => {
@@ -43,7 +42,7 @@ const EditProductForm = () => {
       {(formik) => {
         return (
           <form
-            className="flex flex-col gap-4 items-center justify-center p-4 min-w-[400px] shadow-lg rounded-xl bg-white"
+            className="flex flex-col gap-2 items-center justify-center p-4 min-w-[350px] shadow-lg rounded-xl bg-white"
             onSubmit={formik.handleSubmit}
           >
             <Typography variant="h5">Edit Product</Typography>
@@ -132,7 +131,7 @@ const EditProductForm = () => {
             <FormControl fullWidth>
               <TextField
                 multiline
-                minRows={4}
+                minRows={3}
                 maxRows={8}
                 label="Description"
                 {...formik.getFieldProps("description")}
@@ -147,7 +146,6 @@ const EditProductForm = () => {
             <Button fullWidth type="submit" color="success" variant="contained">
               SUBMIT
             </Button>
-           
           </form>
         );
       }}

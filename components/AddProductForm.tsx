@@ -17,7 +17,6 @@ import {
   Typography,
 } from "@mui/material";
 import { Formik } from "formik";
-import Link from "next/link";
 
 export interface IAddProductForm {
   name: string;
@@ -52,7 +51,7 @@ const AddProductForm = () => {
       {(formik) => {
         return (
           <form
-            className="flex flex-col gap-4 items-center justify-center p-4 min-w-[400px] shadow-lg rounded-xl bg-white"
+            className="flex flex-col gap-2 items-center justify-center p-4 min-w-[350px] shadow-lg rounded-xl bg-white"
             onSubmit={formik.handleSubmit}
           >
             <Typography variant="h5">Add Product</Typography>
@@ -141,7 +140,7 @@ const AddProductForm = () => {
             <FormControl fullWidth>
               <TextField
                 multiline
-                minRows={4}
+                minRows={3}
                 maxRows={8}
                 label="Description"
                 {...formik.getFieldProps("description")}
@@ -156,7 +155,6 @@ const AddProductForm = () => {
             <Button fullWidth type="submit" color="success" variant="contained">
               SUBMIT
             </Button>
-           
           </form>
         );
       }}

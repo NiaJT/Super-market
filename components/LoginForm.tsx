@@ -30,7 +30,7 @@ const LoginForm = () => {
       {(formik) => {
         return (
           <form
-            className="flex flex-col gap-6 items-center justify-center p-6 w-[320px] h-[420px] shadow-lg rounded-xl bg-white"
+            className="flex flex-col gap-6 items-center justify-center p-6 w-[300px] shadow-lg rounded-xl bg-white"
             onSubmit={formik.handleSubmit}
           >
             <Typography variant="h5">Login</Typography>

@@ -1,5 +1,5 @@
 "use client";
-import { userFormSchema } from "@/validationSchema/user.registerSchema";
+import { RegisterFormSchema } from "@/validationSchema/user.registerSchema";
 import {
   Button,
   FormControl,
@@ -23,7 +23,7 @@ interface IRegisterForm {
   address: string;
 }
 
-const UserForm = () => {
+const RegisterForm = () => {
   return (
     <Formik
       initialValues={{
@@ -36,17 +36,17 @@ const UserForm = () => {
         role: "",
         address: "",
       }}
-      validationSchema={userFormSchema}
+      validationSchema={RegisterFormSchema}
       onSubmit={(values: IRegisterForm) => {
         console.log("Form submitted with values:", values);
       }}
     >
       {(formik) => (
         <form
-          className="flex flex-col gap-4 rounded-xl items-center justify-center shadow-2xl p-4 min-w-[450px] bg-white "
+          className="flex flex-col gap-2 items-center justify-center p-4 min-w-[350px] shadow-lg rounded-xl bg-white"
           onSubmit={formik.handleSubmit}
         >
-          <Typography variant="h5">User Form</Typography>
+          <Typography variant="h5">Register Form</Typography>
 
           <FormControl fullWidth>
             <TextField
@@ -155,4 +155,4 @@ const UserForm = () => {
   );
 };
 
-export default UserForm;
+export default RegisterForm;

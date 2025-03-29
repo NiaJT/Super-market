@@ -1,4 +1,4 @@
-import UserForm from "@/components/UserForm";
+import RegisterForm from "@/components/RegisterForm";
 import { Metadata } from "next";
 import React from "react";
 export const metadata: Metadata = {
@@ -7,7 +7,7 @@ export const metadata: Metadata = {
 };
 
 const RegisterPage = () => {
-  return <UserForm />;
+  return <RegisterForm />;
 };
 
 export default RegisterPage;
