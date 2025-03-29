@@ -4,7 +4,7 @@ import Image from "next/image";
 const ProductCard = () => {
   return (
     <Box
-      className="w-[300px] h-[400px] rounded-3xl shadow-2xl bg-white/70 backdrop-blur-md overflow-hidden 
+      className="w-[320px] h-[400px] rounded-3xl shadow-2xl bg-white/70 backdrop-blur-md overflow-hidden 
                  transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl flex flex-col"
     >
       <Box className="relative h-[180px] w-full cursor-pointer overflow-hidden">
@@ -20,7 +20,7 @@ const ProductCard = () => {
       <Box className="p-3 flex flex-col flex-grow justify-between">
         <Box>
           <Box className="flex justify-between items-center">
-            <Typography variant="h6">Wireless Mouse</Typography>
+            <Typography variant="h6">Wireless Ergonomic Mouse</Typography>
             <Typography className="bg-green-600 text-white px-2 py-1 rounded-full text-xs shadow-md">
               Ugreen
             </Typography>
