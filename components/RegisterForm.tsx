@@ -1,16 +1,18 @@
 "use client";
+import { IError } from "@/interface/error.interface";
+import { IResponse } from "@/interface/response.interface";
 import { axiosInstance } from "@/lib/axios.instance";
 import { RegisterFormSchema } from "@/validationSchema/user.registerSchema";
 import {
   Button,
   FormControl,
   FormHelperText,
+  InputLabel,
+  LinearProgress,
   MenuItem,
   Select,
   TextField,
   Typography,
-  InputLabel,
-  CircularProgress,
 } from "@mui/material";
 import { useMutation } from "@tanstack/react-query";
 import { Formik } from "formik";
@@ -27,7 +29,6 @@ interface IRegisterForm {
   role: string;
   address: string;
 }
-
 const RegisterForm = () => {
   const router = useRouter();
   const { isPending, mutate } = useMutation({
@@ -35,16 +36,16 @@ const RegisterForm = () => {
     mutationFn: async (values: IRegisterForm) => {
       return await axiosInstance.post("/user/register", values);
     },
-    onSuccess: (res) => {
+    onSuccess: (res: IResponse) => {
       router.push("/login");
-      toast.success(res?.data?.message);
+      toast.success(res.data.message);
     },
-    onError: (error) => {
-      toast.error(error?.response?.data?.message);
+    onError: (error: IError) => {
+      toast.error(error.response.data.message);
     },
   });
   if (isPending) {
-    return <CircularProgress />;
+    return <LinearProgress />;
   }
   return (
     <Formik

@@ -1,7 +1,8 @@
 import { Box, Typography, Button } from "@mui/material";
 import Image from "next/image";
+import { IProductCard } from "./ProductContainer";
 
-const ProductCard = () => {
+const ProductCard = (props: IProductCard) => {
   return (
     <Box
       className="w-[320px] h-[400px] rounded-3xl shadow-2xl bg-white/70 backdrop-blur-md overflow-hidden 
@@ -20,19 +21,18 @@ const ProductCard = () => {
       <Box className="p-3 flex flex-col flex-grow justify-between">
         <Box>
           <Box className="flex justify-between items-center">
-            <Typography variant="h6">Wireless Ergonomic Mouse</Typography>
+            <Typography variant="h6">{props.name}</Typography>
             <Typography className="bg-green-600 text-white px-2 py-1 rounded-full text-xs shadow-md">
-              Ugreen
+              {props.brand}
             </Typography>
           </Box>
 
           <Typography className="text-lg font-extrabold text-green-600">
-            $20.99
+            {props.price}
           </Typography>
 
           <Typography className="text-xs text-gray-600">
-            Ergonomic wireless mouse with 2400DPI adjustable resolution, silent
-            clicking, and 2.4GHz USB receiver...
+            {props.shortDescription}...
           </Typography>
         </Box>
 
