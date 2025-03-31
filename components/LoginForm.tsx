@@ -34,7 +34,6 @@ const LoginForm = () => {
       window.localStorage.setItem("accessToken", accessToken);
       window.localStorage.setItem("firstName", firstName);
       window.localStorage.setItem("role", role);
-      console.log({ accessToken, firstName });
       toast.success(`Welcome ${firstName}!`);
       router.push("/");
     },

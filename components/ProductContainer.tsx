@@ -1,11 +1,16 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ProductCard from "./ProductCard";
-import { Box, CircularProgress, Button,Stack} from "@mui/material";
+import {
+  Box,
+  CircularProgress,
+  Button,
+  Stack,
+  Pagination,
+} from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import { axiosInstance } from "@/lib/axios.instance";
 import toast from "react-hot-toast";
-
 export interface IProductCard {
   sellerId: string;
   image?: string;
@@ -18,8 +23,14 @@ export interface IProductCard {
 }
 
 const ProductContainer = () => {
+  const [role, setRole] = useState("seller");
   const [currentPage, setCurrentPage] = useState(1);
-
+  useEffect(() => {
+    if (window) {
+      const userRole = window.localStorage.getItem("role") as string;
+      setRole(userRole);
+    }
+  }, []);
   const { isPending, data, error } = useQuery({
     queryKey: ["Product-details", currentPage],
     queryFn: async () => {
@@ -28,7 +39,6 @@ const ProductContainer = () => {
         limit: 5,
       });
     },
-    keepPreviousData: true,
   });
 
   const productList: IProductCard[] = data?.data?.productList;
@@ -43,44 +53,22 @@ const ProductContainer = () => {
     return;
   }
 
-  const handleNextPage = () => {
-    if (currentPage < totalPages) {
-      setCurrentPage(currentPage + 1);
-    }
-  };
-
-  const handlePrevPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
-    }
-  };
-
   return (
-    <Stack>
-    <Box className="flex gap-8 flex-wrap justify-center items-center p-8 m-8">
-      {productList?.map((item) => {
-        return <ProductCard key={item._id} {...item} />;
-      })}
-
-
-    </Box>
-    <Box className="flex justify-center gap-4 mb-4">
-        <Button
-          variant="contained" color="success"
-          onClick={handlePrevPage}
-          disabled={currentPage === 1}
-        >
-          Previous
-        </Button>
-        <Button
-           variant="contained" color="success"
-          onClick={handleNextPage}
-          disabled={currentPage === totalPages}
-        >
-          Next
-        </Button>
+    <Box className="flex flex-col justify-center items-center mb-8">
+      <Box className="flex gap-8 flex-wrap justify-center items-center p-8 m-8">
+        {productList?.map((item) => {
+          return <ProductCard key={item._id} {...item} />;
+        })}
       </Box>
-    </Stack>
+      <Pagination
+        page={currentPage}
+        count={totalPages}
+        color="secondary"
+        onChange={(_, value: number) => {
+          setCurrentPage(value);
+        }}
+      />
+    </Box>
   );
 };
 
