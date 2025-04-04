@@ -25,17 +25,15 @@ import { useMutation } from "@tanstack/react-query";
 import { Formik } from "formik";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
-
 export interface IAddProductForm {
   name: string;
   brand: string;
   price: number;
   quantity: number;
   category: string;
-  freeShipping: boolean;
+  freeShipping: boolean | string;
   description: string;
 }
-
 const AddProductForm = () => {
   const router = useRouter();
   const { isPending, mutate } = useMutation({

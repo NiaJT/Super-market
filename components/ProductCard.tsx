@@ -1,8 +1,10 @@
 import { Box, Typography, Button } from "@mui/material";
 import Image from "next/image";
 import { IProductCard } from "./ProductContainer";
+import { useRouter } from "next/navigation";
 
 const ProductCard = (props: IProductCard) => {
+  const router = useRouter();
   return (
     <Box
       className="w-[320px] h-[400px] rounded-3xl shadow-2xl bg-white/70 backdrop-blur-md overflow-hidden 
@@ -37,10 +39,18 @@ const ProductCard = (props: IProductCard) => {
         </Box>
 
         <Box className="flex gap-1 mt-2">
-          <Button fullWidth variant="contained" color="success" size="small">
+          {/* <Button fullWidth variant="contained" color="success" size="small">
             Add to Cart
-          </Button>
-          <Button fullWidth variant="contained" color="success" size="small">
+          </Button> */}
+          <Button
+            fullWidth
+            variant="contained"
+            color="success"
+            size="small"
+            onClick={() => {
+              router.push(`/product-detail/${props._id}`);
+            }}
+          >
             Details
           </Button>
         </Box>

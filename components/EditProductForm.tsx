@@ -4,11 +4,13 @@ import { productSchema } from "@/validationSchema/addProduct.Schema";
 
 import {
   Button,
+  CircularProgress,
   FormControl,
   FormControlLabel,
   FormHelperText,
   FormLabel,
   InputLabel,
+  LinearProgress,
   MenuItem,
   Radio,
   RadioGroup,
@@ -18,25 +20,64 @@ import {
 } from "@mui/material";
 import { Formik } from "formik";
 import { IAddProductForm } from "./AddProductForm";
-
+import { useParams, useRouter } from "next/navigation";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { axiosInstance } from "@/lib/axios.instance";
+import { IProduct } from "@/interface/product.interface";
+import { IError } from "@/interface/error.interface";
+import toast from "react-hot-toast";
 const EditProductForm = () => {
+  const router = useRouter();
+  const params = useParams();
+  const { isPending, data } = useQuery<IProduct, IError>({
+    queryKey: ["product-details"],
+    queryFn: async () => {
+      const response = await axiosInstance.get(`/product/detail/${params.id}`);
+      return response.data?.productDetails;
+    },
+  });
+  const { isPending: editPending, mutate } = useMutation<
+    { message: string },
+    IError,
+    IAddProductForm
+  >({
+    mutationKey: ["get-product"],
+    mutationFn: async (values) => {
+      const res = await axiosInstance.put(`/product/edit/${params.id}`, values);
+      return res.data;
+    },
+    onSuccess: (data) => {
+      console.log(data);
+      toast.success(data.message);
+      router.push(`/product-detail/${params.id}`);
+    },
+    onError: (error: IError) => {
+      toast.error(error.response.data.message);
+    },
+  });
+  if (isPending) {
+    return <CircularProgress />;
+  }
+
   return (
     <Formik
+      enableReinitialize
       initialValues={{
-        name: "",
-        brand: "",
-        price: 0,
-        quantity: 1,
-        category: "",
-        freeShipping: "false",
-        description: "",
+        name: data?.name || "",
+        brand: data?.brand || "",
+        price: data?.price || 0,
+        quantity: data?.quantity || 1,
+        category: data?.category || "",
+        freeShipping: data?.freeShipping || false,
+        description: data?.description || "",
       }}
       validationSchema={productSchema}
       onSubmit={(values: IAddProductForm) => {
-        console.log({
+        const newValues = {
           ...values,
           freeShipping: values.freeShipping === "true",
-        });
+        };
+        mutate(newValues);
       }}
     >
       {(formik) => {
@@ -45,6 +86,7 @@ const EditProductForm = () => {
             className="flex flex-col gap-2 items-center justify-center p-4 min-w-[350px] shadow-lg rounded-xl bg-white"
             onSubmit={formik.handleSubmit}
           >
+            {editPending && <LinearProgress />}
             <Typography variant="h5">Edit Product</Typography>
             <FormControl fullWidth>
               <TextField

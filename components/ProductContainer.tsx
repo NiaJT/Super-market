@@ -1,13 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import ProductCard from "./ProductCard";
-import {
-  Box,
-  CircularProgress,
-  Button,
-  Stack,
-  Pagination,
-} from "@mui/material";
+import { Box, CircularProgress, Pagination } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import { axiosInstance } from "@/lib/axios.instance";
 import toast from "react-hot-toast";
@@ -39,6 +33,7 @@ const ProductContainer = () => {
         limit: 5,
       });
     },
+    enabled: role === "seller",
   });
 
   const productList: IProductCard[] = data?.data?.productList;

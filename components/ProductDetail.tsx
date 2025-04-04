@@ -1,21 +1,50 @@
+"use client";
 import React from "react";
-import { Box, Button, Typography, Chip, Divider } from "@mui/material";
+import {
+  Box,
+  Button,
+  Typography,
+  Chip,
+  Divider,
+  CircularProgress,
+} from "@mui/material";
 import Image from "next/image";
 import EditIcon from "@mui/icons-material/Edit";
 
 import DeleteProductDialog from "./DeleteProductDialog";
-
+import { useQuery } from "@tanstack/react-query";
+import { useParams, useRouter } from "next/navigation";
+import { axiosInstance } from "@/lib/axios.instance";
+import toast from "react-hot-toast";
+interface IProductDetail {
+  name: string;
+  brand: string;
+  price: number;
+  quantity: number;
+  category: string;
+  freeShipping: boolean;
+  description: string;
+}
 const ProductDetail = () => {
-  const product = {
-    name: "Wireless Ergonomic Mouse",
-    brand: "Ugreen",
-    price: 20.99,
-    quantity: 15,
-    category: "Electronics",
-    freeShipping: "Yes",
-    description:
-      "Wireless Ergonomic Mouse is a convenient and efficient computer peripheral that eliminates the need for tangled cables, providing a seamless and clutter-free experience. It connects to devices using **Bluetooth** or a **2.4GHz USB receiver**, ensuring reliable and fast communication. Modern wireless mice feature **ergonomic designs**, making them comfortable for prolonged use, reducing wrist strain and improving productivity. Many wireless mice come with **adjustable DPI (dots per inch) settings**, allowing users to customize sensitivity for precise control in different tasks, from everyday browsing to gaming and graphic design. Advanced models offer **silent clicking**, which is ideal for quiet work environments, and **rechargeable batteries**, eliminating the need for frequent battery replacements. The **plug-and-play functionality** of wireless mice makes them easy to use, with most devices automatically detecting and pairing without additional software. Some models even feature **multi-device pairing**, allowing users to switch between multiple computers seamlessly. Popular brands such as **Logitech, Razer, and Ugreen** produce high-quality wireless mice with features like programmable buttons, customizable RGB lighting, and ultra-fast response times. Whether for work, gaming, or everyday use, a **wireless mouse enhances convenience, mobility, and productivity**, making it a must-have accessory for any computer user.",
-  };
+  const router = useRouter();
+  const params = useParams();
+  const productId = params.id as string;
+  const { isPending, data, error } = useQuery({
+    queryKey: ["get-product-detail"],
+    queryFn: async () => {
+      return await axiosInstance.get(`/product/detail/${productId}`);
+    },
+  });
+  const product: IProductDetail = data?.data?.productDetails;
+
+  if (isPending) {
+    return <CircularProgress />;
+  }
+
+  if (error) {
+    toast.error(error?.response?.data?.message);
+    return;
+  }
 
   return (
     <Box className="flex flex-col md:flex-row gap-8 w-full max-w-6xl p-6 bg-white rounded-xl shadow-lg m-8">
@@ -65,7 +94,7 @@ const ProductDetail = () => {
                   : "Out of stock"}
               </span>
             </Typography>
-            {product.freeShipping === "Yes" && (
+            {product.freeShipping === true && (
               <Chip
                 label="Free Shipping"
                 className="bg-orange-100 text-orange-800 ml-2"
@@ -100,10 +129,13 @@ const ProductDetail = () => {
             color="secondary"
             startIcon={<EditIcon />}
             className="md:w-auto px-8 py-2"
+            onClick={() => {
+              router.push(`/edit-product/${productId}`);
+            }}
           >
             Edit
           </Button>
-          <DeleteProductDialog />
+          <DeleteProductDialog id={productId} />
         </Box>
       </Box>
     </Box>
